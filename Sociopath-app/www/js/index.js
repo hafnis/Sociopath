@@ -17,57 +17,50 @@
  * under the License.
  */
 var app = {
-    // Application Constructor
+
     initialize: function() {
         this.bindEvents();
     },
-    // Bind Event Listeners
-    //
-    // Bind any events that are required on startup. Common events are:
-    // 'load', 'deviceready', 'offline', and 'online'.
+
     bindEvents: function() {
         document.addEventListener('deviceready', this.onDeviceReady, false);
     },
-    // deviceready Event Handler
-    //
-    // The scope of 'this' is the event. In order to call the 'receivedEvent'
-    // function, we must explicitly call 'app.receivedEvent(...);'
+
     onDeviceReady: function() {
-		//window.open = cordova.InAppBrowser.open;
         app.receivedEvent('deviceready');
     },
-    // Update DOM on a Received Event
-    receivedEvent: function(id) {
-        // var parentElement = document.getElementById(id);
-        // var listeningElement = parentElement.querySelector('.listening');
-        // var receivedElement = parentElement.querySelector('.received');
 
-        // listeningElement.setAttribute('style', 'display:none;');
-        // receivedElement.setAttribute('style', 'display:block;');
-		$('.facebookLogin').on('click', function() {
-			var my_client_id = '887468504694694',
-			my_redirect_uri = "http://sociopath.local/",
-			 my_type = "user_agent",
-			 my_display = "touch";
-
-			 var authorize_url = "https://www.facebook.com/dialog/oauth?";
-			 authorize_url += "client_id=" + my_client_id;
-			 authorize_url += "&redirect_uri=" + my_redirect_uri;
-			 authorize_url += "&display=" + my_display;
-			 //authorize_url += "&scope=publish_stream,email,user_likes";
-			 //('hello from facebook click');	     
-			 var ref = cordova.InAppBrowser.open(authorize_url, '_blank', 'location=yes');
-			 alert('hello from facebook click');
-			 ref.addEventListener('loadstart', function(event) {
-				this.facebookLoc(event.url,appInBrowser);
-			});
-    });
-	},
 	
-	 facebookLoc : function(loc,appInBrowser) {
-	    if (loc.indexOf("www.facebook.com/connect/login_success.html") > -1){
-			  alert('Login success');
-			  appInBrowser.close();
-	    }
+    receivedEvent: function(id) {
+
+		$( ":mobile-pagecontainer" ).on( "pagecontainerchange", function( event, ui ) {
+			if (ui.options.target == 'home.html') {
+					home.init(ui.toPage[0]);
+			}
+		} );	
+	
+		$('.facebookLogin').on('click', function() {
+			var fbLoginSuccess = function (userData) {
+				$( ":mobile-pagecontainer" ).pagecontainer( "change", "home.html", { role: "page", refresh: true } );		
+			}
+			
+			var loginError = function (error) {
+				console.log(error);
+			}
+
+			facebookConnectPlugin.login(["public_profile"],
+				fbLoginSuccess,
+				loginError
+			);
+		});
 	}
+	
 };
+
+// function facebookSuccess(response) {
+	// alert(response);
+// };
+
+// function facebookUnsuccess() {
+	// alert('smth wrong');
+// }

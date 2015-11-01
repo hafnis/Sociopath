@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.phonegap.helloworld" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
-    <name>Hello World</name>
+    <name>Sociopath</name>
     <description>
         Hello World sample application that responds to the deviceready event.
     </description>
@@ -41,6 +41,10 @@
     <gap:plugin name="org.apache.cordova.splashscreen" source="npm"/>
     <gap:plugin name="org.apache.cordova.vibration" source="npm"/>
 	<gap:plugin name="com.stevenpartridge.inappbrowser" version="1.4" />
+	<gap:plugin name="com.phonegap.plugins.facebookconnect" version="0.8.0">
+        <param name="APP_ID" value="887468504694694" />
+        <param name="APP_NAME" value="Sociopath" />
+    </gap:plugin>
 	<icon src="icon.png" />
     <icon gap:platform="android" gap:qualifier="ldpi" src="www/res/icon/android/icon-36-ldpi.png" />
     <icon gap:platform="android" gap:qualifier="mdpi" src="www/res/icon/android/icon-48-mdpi.png" />

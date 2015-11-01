@@ -17,33 +17,50 @@
  * under the License.
  */
 var app = {
-    // Application Constructor
+
     initialize: function() {
         this.bindEvents();
     },
-    // Bind Event Listeners
-    //
-    // Bind any events that are required on startup. Common events are:
-    // 'load', 'deviceready', 'offline', and 'online'.
+
     bindEvents: function() {
         document.addEventListener('deviceready', this.onDeviceReady, false);
     },
-    // deviceready Event Handler
-    //
-    // The scope of 'this' is the event. In order to call the 'receivedEvent'
-    // function, we must explicitly call 'app.receivedEvent(...);'
+
     onDeviceReady: function() {
         app.receivedEvent('deviceready');
     },
-    // Update DOM on a Received Event
+
+	
     receivedEvent: function(id) {
-        var parentElement = document.getElementById(id);
-        var listeningElement = parentElement.querySelector('.listening');
-        var receivedElement = parentElement.querySelector('.received');
 
-        listeningElement.setAttribute('style', 'display:none;');
-        receivedElement.setAttribute('style', 'display:block;');
+		$( ":mobile-pagecontainer" ).on( "pagecontainerchange", function( event, ui ) {
+			if (ui.options.target == 'home.html') {
+					home.init(ui.toPage[0]);
+			}
+		} );	
+	
+		$('.facebookLogin').on('click', function() {
+			var fbLoginSuccess = function (userData) {
+				$( ":mobile-pagecontainer" ).pagecontainer( "change", "home.html", { role: "page", refresh: true } );		
+			}
+			
+			var loginError = function (error) {
+				console.log(error);
+			}
 
-        console.log('Received Event: ' + id);
-    }
+			facebookConnectPlugin.login(["public_profile"],
+				fbLoginSuccess,
+				loginError
+			);
+		});
+	}
+	
 };
+
+// function facebookSuccess(response) {
+	// alert(response);
+// };
+
+// function facebookUnsuccess() {
+	// alert('smth wrong');
+// }
