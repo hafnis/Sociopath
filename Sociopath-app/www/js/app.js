@@ -4,9 +4,23 @@ module.exports = function (messages) {
 	
 	self.messages = ko.observableArray(messages);
 	
+	self.openSettings = function() {
+		$( ":mobile-pagecontainer" ).pagecontainer( "change", "settings.html", { role: "page", refresh: true } );	
+	}
+	
 	return self;
 };
 },{}],2:[function(require,module,exports){
+module.exports = function () {
+	var self = this;
+	
+	self.goBack = function() {
+		$( ":mobile-pagecontainer" ).pagecontainer( "change", "home.html", { role: "page" } );	
+	}
+	
+	return self;
+};
+},{}],3:[function(require,module,exports){
 module.exports = {
 	
 	init: function(page) {
@@ -25,12 +39,13 @@ module.exports = {
 }
 
 
-},{"./ViewModels/FeedViewModel":1}],3:[function(require,module,exports){
+},{"./ViewModels/FeedViewModel":1}],4:[function(require,module,exports){
 var app = (function() {
 	
 	var self = this;
 	
 	self.home = require('./home');
+	self.settings = require('./settings');
 	
     self.initialize = function() {
         this.bindEvents();
@@ -47,15 +62,17 @@ var app = (function() {
 	
     self.receivedEvent = function(id) {
 
-		$( ":mobile-pagecontainer" ).on( "pagecontainerchange", function( event, ui ) {
-			if (ui.options.target == 'home.html') {
-					home.init(ui.toPage[0]);
+		$( ":mobile-pagecontainer" ).on( "pagecontainerload", function( event, ui ) {
+			if (ui.options.target == 'home.html' && ui.options.reloadPage) {
+				home.init(ui.toPage[0]);
+			} else if (ui.options.target == 'settings.html') {
+				settings.init(ui.toPage[0]);
 			}
 		} );	
 	
 		$('.facebookLogin').on('click', function() {
 			var fbLoginSuccess = function (userData) {
-				$( ":mobile-pagecontainer" ).pagecontainer( "change", "home.html", { role: "page", refresh: true } );		
+				$( ":mobile-pagecontainer" ).pagecontainer( "change", "home.html", { role: "page", reloadPage: true } );		
 			}
 			
 			var loginError = function (error) {
@@ -74,4 +91,14 @@ var app = (function() {
 app.initialize();
 
 
-},{"./home":2}]},{},[3]);
+},{"./home":3,"./settings":5}],5:[function(require,module,exports){
+module.exports = {
+	
+	init: function(page) {
+		
+		var settingsViewModel = require('./ViewModels/SettingsViewModel');
+
+		ko.applyBindings(new settingsViewModel(), page);
+	}
+}
+},{"./ViewModels/SettingsViewModel":2}]},{},[4]);
