@@ -1,19 +1,19 @@
 <div data-role="page" id="home" data-dom-cache="true">
 	<div data-role="header">
-		<h1 style="display: inline-block;margin-left: 162px;font-size: 18px;vertical-align: middle;">Feed</h1>
-		<img src="./img/settings.png" style="float: right;height: 33px;padding-right: 17px;padding-top: 7px;vertical-align: middle;" data-bind="click: openSettings">
+		<h1 class="feed-header">Feed</h1>
+		<img class="feed-header-settings" src="./img/settings.png" data-bind="click: openSettings">
 	</div>
     <div data-bind="foreach: messages" style="margin-bottom: 15px;">
-		<div style=" width: 85%;margin-left: auto;margin-right: auto;margin-top: 15px;border: 1px solid black;border-color: #ddd;border-radius: 7px;">
-				<div data-bind="text: time" style="padding: 5px; display: inline-block; color: #9197A3"></div> 
+		<div class="feed-message-wrapper">
+				<div class="feed-message-time" data-bind="text: time"></div> 
 				<span style="vertical-align:middle;" data-bind="foreach: networks">				
-					<img data-bind="attr: {src: './img/' + $data + '.png'}" style="height: 13px;">
+					<img data-bind="attr: {src: './img/' + $data + '.png'}"	 class="feed-message-network">
 				</span>				
-				<div data-bind="text: message" style="margin-left: 20px;margin-bottom: 10px;margin-right:20px;"></div>
+				<div data-bind="text: message" class="feed-message-text"></div>
 		</div>
 	</div>
-	<div>
-		<div style="text-align: center;"><a data-role="button" data-rel="popup" data-inline="true" class="btn-custom" href="#new-message">Post new message</a></div>
+	<div data-role="footer" data-position="fixed" data-tap-toggle="false">
+		<div style="text-align: center;"><a data-role="button" data-rel="popup" data-inline="true" class="btn-post" href="#new-message">Post new message</a></div>
 	</div>
 	
 <div data-role="popup" class="message-popup" id="new-message" data-overlay-theme="b" data-theme="b" data-dismissible="false">
@@ -21,9 +21,9 @@
     <h1>New message</h1>
     </div>
     <div role="main" class="ui-content">
-		<textarea class="message-area"></textarea>
-        <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b">Send</a>
-        <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back" data-transition="flow">Cancel</a>
+		<textarea class="message-area" data-bind="value: newMessage"></textarea>
+        <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-bind="click: send">Send</a>
+        <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-transition="flow" data-rel="back">Cancel</a>
     </div>
 </div>
 </div>

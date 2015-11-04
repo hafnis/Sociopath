@@ -5,14 +5,25 @@ module.exports = function (messages) {
 	self.messages = ko.observableArray(messages);
 	
 	self.openSettings = function() {
-		$( ":mobile-pagecontainer" ).pagecontainer( "change", "settings.html", { role: "page", refresh: true } );	
+		$( ":mobile-pagecontainer" ).pagecontainer( "change", "settings.html", { role: "page", reloadPage: true } );	
+	}
+
+	self.newMessage = ko.observable('');
+	
+	self.send = function() {
+		self.messages.unshift({message:self.newMessage(), time: '10:00', networks: ['facebook', 'twitter']});
+		self.newMessage('');
+		$('#new-message').popup('close');
+		$.mobile.silentScroll(0);
 	}
 	
 	return self;
 };
 },{}],2:[function(require,module,exports){
-module.exports = function () {
+module.exports = function (networks) {
 	var self = this;
+	
+	self.networks = ko.observableArray(networks);
 	
 	self.goBack = function() {
 		$( ":mobile-pagecontainer" ).pagecontainer( "change", "home.html", { role: "page" } );	
@@ -65,7 +76,7 @@ var app = (function() {
 		$( ":mobile-pagecontainer" ).on( "pagecontainerload", function( event, ui ) {
 			if (ui.options.target == 'home.html' && ui.options.reloadPage) {
 				home.init(ui.toPage[0]);
-			} else if (ui.options.target == 'settings.html') {
+			} else if (ui.options.target == 'settings.html' && ui.options.reloadPage) {
 				settings.init(ui.toPage[0]);
 			}
 		} );	
@@ -90,6 +101,17 @@ var app = (function() {
 
 app.initialize();
 
+    $(document).on('focus', 'input, textArea', function () {
+        $('div[data-role="footer"]').hide();
+    })  
+
+    $(document).on('blur', 'input, textarea', function() {
+        setTimeout(function() {
+            window.scrollTo(document.body.scrollLeft, document.body.scrollTop);
+            $('div[data-role="footer"]').show();
+        }, 0);
+    });
+
 
 },{"./home":3,"./settings":5}],5:[function(require,module,exports){
 module.exports = {
@@ -97,8 +119,8 @@ module.exports = {
 	init: function(page) {
 		
 		var settingsViewModel = require('./ViewModels/SettingsViewModel');
-
-		ko.applyBindings(new settingsViewModel(), page);
+		
+		ko.applyBindings(new settingsViewModel([{connected: true, enabled: true, name: 'Facebook'}, {connected: true, enabled: false, name: 'Twitter'}]), page);
 	}
 }
 },{"./ViewModels/SettingsViewModel":2}]},{},[4]);

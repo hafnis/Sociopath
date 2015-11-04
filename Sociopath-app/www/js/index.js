@@ -48,3 +48,14 @@ var app = (function() {
 
 app.initialize();
 
+    $(document).on('focus', 'input, textArea', function () {
+        $('div[data-role="footer"]').hide();
+    })  
+
+    $(document).on('blur', 'input, textarea', function() {
+        setTimeout(function() {
+            window.scrollTo(document.body.scrollLeft, document.body.scrollTop);
+            $('div[data-role="footer"]').show();
+        }, 0);
+    });
+

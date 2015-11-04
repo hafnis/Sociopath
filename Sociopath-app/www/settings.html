@@ -3,18 +3,22 @@
 		<a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-left ui-icon-carat-l ui-btn-icon-left back-button" data-bind="click: goBack">Back</a>
 		<h1 style="font-size: 18px;">Settings</h1>
 	</div>
-	<div class="settings-container">
-		<div>
-			<h2 class="settings-social-header">Facebook</h2>
-			<label for="facebook-checkbox">Post messages to Facebook<input data-inline="true" type="checkbox" checked="true" id="facebook-checkbox"></label>
-		</div>
-		<div>
-			<h2 class="settings-social-header">Twitter</h2>
-			<div style="text-align: center;"><a data-role="button" data-inline="true" class="btn-custom">Connect Twitter</a></div>
-		</div>
-		<div class="settings-btn-save"> 
-			<div style="text-align: center;"><a data-role="button" data-inline="true" class="btn-custom">Save settings</a></div>
-		</div>
+	<div class="settings-container" data-bind="foreach: networks">
+		<!-- ko if: connected-->
+			<div>
+				<h2 class="settings-social-header" data-bind="text: name"></h2>
+				<label for="facebook-checkbox">Post messages to <span data-bind="text: name"></span><input data-inline="true" type="checkbox" data-bind="checked: enabled" id="facebook-checkbox"></label>
+			</div>
+		<!-- /ko -->
+		<!-- ko ifnot: connected -->
+			<div>
+				<h2 class="settings-social-header" data-bind="text: name"></h2>
+				<div style="text-align: center;"><a data-role="button" data-inline="true" class="btn-custom">Connect <span data-bind="text: name"></span></a></div>
+			</div>
+		<!-- /ko -->
+	</div>
+	<div data-role="footer" data-position="fixed">
+		<div style="text-align: center;"><a data-role="button" data-inline="true" class="btn-post">Save</a></div>
 	</div>
 </div>
 
