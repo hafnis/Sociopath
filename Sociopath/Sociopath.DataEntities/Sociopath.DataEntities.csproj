@@ -61,17 +61,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\User.cs" />
     <Compile Include="EntityBase.cs" />
     <Compile Include="Enums\CustomerType.cs" />
     <Compile Include="IEntity.cs" />
     <Compile Include="Mappings\EntityMapBase.cs" />
     <Compile Include="Mappings\PersistentEntityMapBase.cs" />
+    <Compile Include="Mappings\UserMap.cs" />
     <Compile Include="PersistentEntityBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Dto\" />
-    <Folder Include="Entities\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

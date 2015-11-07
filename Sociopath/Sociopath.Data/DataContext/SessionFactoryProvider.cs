@@ -14,13 +14,6 @@ namespace Sociopath.Data.DataContext
 
         private volatile ISessionFactory sessionFactory;
 
-        private IPrincipalAccessor principalAccessor;
-
-        public SessionFactoryProvider(IPrincipalAccessor principalAccessor)
-        {
-            this.principalAccessor = principalAccessor;
-        }
-
         public ISessionFactory SessionFactory
         {
             get

@@ -4,15 +4,32 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Sociopath.DataContracts;
+using Sociopath.DataEntities.Entities;
 
 namespace Sociopath.API.Controllers
 {
     public class ValuesController : ApiController
     {
-        // GET api/values
-        public IEnumerable<string> Get()
+        private IRepository repository;
+
+        public ValuesController(IRepository repository)
         {
-            return new string[] { "value1", "value2" };
+            this.repository = repository;
+        }
+
+        // GET api/values
+        public List<User> Get()
+        {
+            var user = new User();
+            user.FacebookToken = "labas as krabas";
+
+            repository.Save(user);
+            repository.Commit();
+
+            var user2 = repository.AsQueryable<User>().ToList();
+
+            return user2;
         }
 
         // GET api/values/5
