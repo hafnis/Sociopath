@@ -5,6 +5,25 @@ VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sociopath.API", "Sociopath.API\Sociopath.API.csproj", "{107E58C2-D688-423D-A982-810B60986F80}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{BE21DC4D-9159-4760-A03F-BE13421F3077}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{093C9951-DBFE-4F18-BEED-243E2947E42D}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataContracts", "DataContracts", "{35A856FE-9661-47EF-A563-A39C7E98B4CC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataEntities", "DataEntities", "{1120336D-1FCF-46D7-827D-F9FECDEA6553}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sociopath.Data", "Sociopath.Data\Sociopath.Data.csproj", "{2C22D2A2-40E5-4475-9DC9-48B6B0D0D2EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sociopath.DataContracts", "Sociopath.DataContracts\Sociopath.DataContracts.csproj", "{0A9661C0-67DD-43C7-99EF-337CE3BFD124}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sociopath.DataEntities", "Sociopath.DataEntities\Sociopath.DataEntities.csproj", "{44EB262A-2060-4906-B5B1-722F9BB1775B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,8 +34,25 @@ Global
 		{107E58C2-D688-423D-A982-810B60986F80}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{107E58C2-D688-423D-A982-810B60986F80}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{107E58C2-D688-423D-A982-810B60986F80}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C22D2A2-40E5-4475-9DC9-48B6B0D0D2EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C22D2A2-40E5-4475-9DC9-48B6B0D0D2EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C22D2A2-40E5-4475-9DC9-48B6B0D0D2EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C22D2A2-40E5-4475-9DC9-48B6B0D0D2EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A9661C0-67DD-43C7-99EF-337CE3BFD124}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A9661C0-67DD-43C7-99EF-337CE3BFD124}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A9661C0-67DD-43C7-99EF-337CE3BFD124}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A9661C0-67DD-43C7-99EF-337CE3BFD124}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44EB262A-2060-4906-B5B1-722F9BB1775B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44EB262A-2060-4906-B5B1-722F9BB1775B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44EB262A-2060-4906-B5B1-722F9BB1775B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44EB262A-2060-4906-B5B1-722F9BB1775B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2C22D2A2-40E5-4475-9DC9-48B6B0D0D2EF} = {BE21DC4D-9159-4760-A03F-BE13421F3077}
+		{0A9661C0-67DD-43C7-99EF-337CE3BFD124} = {35A856FE-9661-47EF-A563-A39C7E98B4CC}
+		{44EB262A-2060-4906-B5B1-722F9BB1775B} = {1120336D-1FCF-46D7-827D-F9FECDEA6553}
 	EndGlobalSection
 EndGlobal
