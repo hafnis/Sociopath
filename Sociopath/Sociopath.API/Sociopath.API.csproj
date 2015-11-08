@@ -321,6 +321,14 @@
       <Project>{2c22d2a2-40e5-4475-9dc9-48b6b0d0d2ef}</Project>
       <Name>Sociopath.Data</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Sociopath.ServiceContracts\Sociopath.ServiceContracts.csproj">
+      <Project>{fa1ae7a4-68a3-4d71-9735-1a47bc8a6afc}</Project>
+      <Name>Sociopath.ServiceContracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sociopath.Services\Sociopath.Services.csproj">
+      <Project>{d9c59772-f40b-42f9-b4ad-12fda2c4a0ff}</Project>
+      <Name>Sociopath.Services</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

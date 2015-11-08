@@ -12,6 +12,8 @@ using System.Web.Routing;
 using Sociopath.Data;
 using Sociopath.Data.DataContext;
 using Sociopath.DataContracts;
+using Sociopath.ServiceContracts;
+using Sociopath.Services;
 
 namespace Sociopath.API
 {
@@ -34,7 +36,10 @@ namespace Sociopath.API
             var builder = new ContainerBuilder();
 
             builder.RegisterType<SessionFactoryProvider>().As<ISessionFactoryProvider>().SingleInstance();
-            builder.RegisterType<Repository>().As<IRepository>().InstancePerApiRequest();
+            builder.RegisterType<Repository>().As<IRepository>().InstancePerLifetimeScope();
+            builder.RegisterType<FacebookService>().As<IFacebookService>().InstancePerLifetimeScope();
+            builder.RegisterType<FeedService>().As<IFeedService>().InstancePerLifetimeScope();
+            builder.RegisterType<TwitterService>().As<ITwitterService>().InstancePerLifetimeScope();
 
             var config = GlobalConfiguration.Configuration;
 

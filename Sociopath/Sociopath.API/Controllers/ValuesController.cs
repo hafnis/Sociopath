@@ -6,26 +6,25 @@ using System.Net.Http;
 using System.Web.Http;
 using Sociopath.DataContracts;
 using Sociopath.DataEntities.Entities;
+using Sociopath.ServiceContracts;
 
 namespace Sociopath.API.Controllers
 {
     public class ValuesController : ApiController
     {
         private IRepository repository;
+        private IFacebookService facebookService;
 
-        public ValuesController(IRepository repository)
+        public ValuesController(IRepository repository, IFacebookService facebookService)
         {
             this.repository = repository;
+            this.facebookService = facebookService;
         }
 
         // GET api/values
         public List<User> Get()
         {
-            var user = new User();
-            user.FacebookToken = "labas as krabas";
-
-            repository.Save(user);
-            repository.Commit();
+            facebookService.GetFeed();
 
             var user2 = repository.AsQueryable<User>().ToList();
 

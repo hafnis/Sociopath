@@ -61,11 +61,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\Feed.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="EntityBase.cs" />
     <Compile Include="Enums\CustomerType.cs" />
     <Compile Include="IEntity.cs" />
     <Compile Include="Mappings\EntityMapBase.cs" />
+    <Compile Include="Mappings\FeedMap.cs" />
     <Compile Include="Mappings\PersistentEntityMapBase.cs" />
     <Compile Include="Mappings\UserMap.cs" />
     <Compile Include="PersistentEntityBase.cs" />
