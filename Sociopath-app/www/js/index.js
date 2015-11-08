@@ -30,6 +30,7 @@ var app = (function() {
 	
 		$('.facebookLogin').on('click', function() {
 			var fbLoginSuccess = function (userData) {
+				console.log(userData);
 				$( ":mobile-pagecontainer" ).pagecontainer( "change", "home.html", { role: "page", reloadPage: true } );		
 			}
 			
@@ -37,7 +38,7 @@ var app = (function() {
 				console.log(error);
 			}
 
-			facebookConnectPlugin.login(["public_profile"],
+			facebookConnectPlugin.login(["public_profile", "user_posts"],
 				fbLoginSuccess,
 				loginError
 			);
