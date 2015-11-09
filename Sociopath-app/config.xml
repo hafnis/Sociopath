@@ -40,7 +40,7 @@
     <gap:plugin name="org.apache.cordova.network-information" source="npm" />
     <gap:plugin name="org.apache.cordova.splashscreen" source="npm" />
     <gap:plugin name="org.apache.cordova.vibration" source="npm" />
-    <gap:plugin name="com.stevenpartridge.inappbrowser" version="1.4" />
+	<gap:plugin name="cordova-plugin-whitelist" source="npm" />
     <gap:plugin name="com.phonegap.plugins.facebookconnect" version="0.8.0">
         <param name="APP_ID" value="887468504694694" />
         <param name="APP_NAME" value="Sociopath" />

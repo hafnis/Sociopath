@@ -77,7 +77,14 @@
             "APP_ID": "887468504694694",
             "APP_NAME": "Sociopath",
             "PACKAGE_NAME": "com.phonegap.helloworld"
+        },
+        "com.oauthio.plugins.oauthio": {
+            "PACKAGE_NAME": "com.phonegap.helloworld"
         }
     },
-    "dependent_plugins": {}
+    "dependent_plugins": {
+        "cordova-plugin-inappbrowser": {
+            "PACKAGE_NAME": "com.phonegap.helloworld"
+        }
+    }
 }
