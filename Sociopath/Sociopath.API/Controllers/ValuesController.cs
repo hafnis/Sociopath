@@ -22,13 +22,13 @@ namespace Sociopath.API.Controllers
         }
 
         // GET api/values
-        public List<User> Get()
+        public IList<Feed> Get()
         {
-            facebookService.GetFeed();
+            var result = facebookService.GetFeed();
 
             var user2 = repository.AsQueryable<User>().ToList();
 
-            return user2;
+            return result;
         }
 
         // GET api/values/5

@@ -61,6 +61,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dto\FeedModel.cs" />
     <Compile Include="Entities\Feed.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="EntityBase.cs" />
@@ -73,9 +74,7 @@
     <Compile Include="PersistentEntityBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Dto\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>

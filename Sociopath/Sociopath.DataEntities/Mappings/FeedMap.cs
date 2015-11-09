@@ -14,7 +14,10 @@ namespace Sociopath.DataEntities.Mappings
 
             Id(f => f.Id).GeneratedBy.Identity();
 
-            Map(f => f.Message).Not.Nullable();
+            Map(f => f.Message).Not.Nullable().CustomType("StringClob").CustomSqlType("nvarchar(max)");
+            Map(f => f.Time).Not.Nullable();
+            Map(f => f.FacebookExternalId).Nullable();
+            Map(f => f.TwitterExternalId).Nullable();
         }
     }
 }

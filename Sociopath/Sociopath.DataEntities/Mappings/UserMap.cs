@@ -15,6 +15,9 @@ namespace Sociopath.DataEntities.Mappings
             Id(f => f.Id).GeneratedBy.Identity();
 
             Map(f => f.FacebookToken).Nullable();
+            Map(f => f.TwitterToken).Nullable();
+            Map(f => f.TwitterId).Nullable();
+            Map(f => f.FacebookId).Nullable();
         }
     }
 }
