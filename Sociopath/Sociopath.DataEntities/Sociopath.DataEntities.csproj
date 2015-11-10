@@ -62,10 +62,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dto\FeedModel.cs" />
+    <Compile Include="Dto\LoginModel.cs" />
     <Compile Include="Entities\Feed.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="EntityBase.cs" />
-    <Compile Include="Enums\CustomerType.cs" />
+    <Compile Include="Enums\Provider.cs" />
     <Compile Include="IEntity.cs" />
     <Compile Include="Mappings\EntityMapBase.cs" />
     <Compile Include="Mappings\FeedMap.cs" />

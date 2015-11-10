@@ -20,7 +20,7 @@ namespace Sociopath.API.Controllers
 
         public HttpResponseMessage Get()
         {
-            var messages = feedService.GetFeed();
+            var messages = feedService.GetFeed(new FeedModel() { UserId = 5});
             var response = Request.CreateResponse(HttpStatusCode.OK, messages);
             return response;
         }

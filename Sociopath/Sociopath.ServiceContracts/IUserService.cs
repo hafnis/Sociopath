@@ -8,9 +8,8 @@ using Sociopath.DataEntities.Entities;
 
 namespace Sociopath.ServiceContracts
 {
-    public interface IFacebookService
+    public interface IUserService
     {
-        IList<Feed> GetFeed(FeedModel request);
-        Feed PostFeed(FeedModel request);
+        User GetUser(LoginModel model);
     }
 }

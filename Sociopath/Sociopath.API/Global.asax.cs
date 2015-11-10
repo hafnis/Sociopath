@@ -40,6 +40,7 @@ namespace Sociopath.API
             builder.RegisterType<FacebookService>().As<IFacebookService>().InstancePerLifetimeScope();
             builder.RegisterType<FeedService>().As<IFeedService>().InstancePerLifetimeScope();
             builder.RegisterType<TwitterService>().As<ITwitterService>().InstancePerLifetimeScope();
+            builder.RegisterType<UserService>().As<IUserService>().InstancePerLifetimeScope();
 
             var config = GlobalConfiguration.Configuration;
 

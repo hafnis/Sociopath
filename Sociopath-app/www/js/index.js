@@ -45,16 +45,20 @@ var app = (function() {
 		});
 		
 		$('.twitterLogin').on('click', function() {
-			var url = "https://oauth.io/auth/facebook?k=bQveABZX4h316Hug8fo7MP_mqZw&redirect_uri=http%3A%2F%2Flocalhost&opts=%7B%22state%22%3A%22Umwa_CZkK1naefyWXK9fKdCvz4Y%22%2C%22state_type%22%3A%22client%22%7D";
 			OAuth.initialize('bQveABZX4h316Hug8fo7MP_mqZw');
-			OAuth.popup('twitter')
-			.done(function(result) {
-				console.log(result);
-				$( ":mobile-pagecontainer" ).pagecontainer( "change", "home.html", { role: "page", reloadPage: true } );
-			})
-			.fail(function (err) {
-			  alert(result);
-			});
+			OAuth.popup('twitter', {cache: false})
+				.done(function(result) {
+					console.log(result);
+					result.me().done(function (data) {
+						console.log(data);
+					}).fail(function (data) {
+						console.log(data);
+					});
+					$( ":mobile-pagecontainer" ).pagecontainer( "change", "home.html", { role: "page", reloadPage: true } );
+				})
+				.fail(function (err) {
+				  alert(result);
+				});
 		});
 	}
 	return self;

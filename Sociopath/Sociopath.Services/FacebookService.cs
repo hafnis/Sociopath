@@ -14,7 +14,8 @@ namespace Sociopath.Services
 {
     public class FacebookService : IFacebookService
     {
-        private const string UserId = "1266148806744180";
+        private const string AppId = "887468504694694";
+        private const string AppSecret = "86aad88a61e307654655537ab6c8ed41";
         private IRepository repository;
 
         public FacebookService(IRepository repository)
@@ -23,14 +24,18 @@ namespace Sociopath.Services
         }
 
 
-        public IList<Feed> GetFeed()
+        public IList<Feed> GetFeed(FeedModel model)
         {
-            var client = new FacebookClient();
-            client.AccessToken = "CAAMnJdz4v6YBAEye8Pam1C5SVuwetZCtdzov7JdvOtzgw3MhTCJAABkMH8SFNGPP7BB7ZBrJmJJNUAZB7yt4NjbvZBYd4xbyQzHzMQLAbLYKsmSA7TuVra63AeyRgdYH0GvFwBGat8yYgwmoPRHVDy4YJtuZCR6FIxZCOhfpI2N1iIJpiOCxGBy8X0G1DouJrVSOT5DC4wbSUzrnIe0ui9uTeqK3ir1mQOCJvMydCK6au1PNSjE2BouHm9ExHxYYsZD";
-            client.AppId = "887468504694694";
-            client.AppSecret = "86aad88a61e307654655537ab6c8ed41";
+            var user = repository.AsQueryable<User>().FirstOrDefault(x => x.Id == model.UserId);
+            if (user == null)
+            {
+                return null;
+            }
 
-            var request = string.Format("/{0}/feed/", UserId);
+            var client = new FacebookClient();
+            client.AccessToken = user.FacebookToken;
+
+            var request = string.Format("me/feed");
 
             dynamic response = client.Get(request);
             var data = response["data"];
@@ -53,7 +58,7 @@ namespace Sociopath.Services
         }
 
 
-        public string PostFeed(FeedModel request)
+        public Feed PostFeed(FeedModel request)
         {
             var user = repository.AsQueryable<User>().FirstOrDefault(x => x.Id == request.UserId);
             if (user == null)
@@ -62,10 +67,18 @@ namespace Sociopath.Services
             }
 
             var client = new FacebookClient();
-            client.AccessToken = "CAAMnJdz4v6YBAFNbjD7ZCwhBrDlFmWfARYwKHLZAHM49ZBizJprLKrFmxIXKOXUnVZB87pqIbryfAZCGhrZCKocKCeKpGgU9oKLl6WXZBSZBL2h36lczEREUyJdgCJl2DVB3KXQoQzmmf58XKK4Vz74JR4ayMF3ZCVBBJRMnb7jNxBoGZApI8k0JleoF0QgZB8D8ZBnpZAoYVMcZBR8NZCinVQIfUTlN9RU9kGxZBQZCcJ5Kz5fS1yGSTrOZAZBZBYv5a2T5NJRPuZBwZD";
+            client.AccessToken = user.FacebookToken;
             
             var response = client.Post("me/feed", new { message = request.Message});
-            return response.ToString();
+
+            if (!string.IsNullOrEmpty(response.ToString())) {
+                var feed = new Feed { FacebookExternalId = response.ToString(), Time = DateTime.Now, Message = request.Message };
+                repository.Save(feed);
+                repository.Commit();
+                return feed;
+            }
+
+            return null;
         }
     }
 

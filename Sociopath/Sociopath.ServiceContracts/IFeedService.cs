@@ -10,7 +10,7 @@ namespace Sociopath.ServiceContracts
 {
     public interface IFeedService
     {
-        IList<Feed> GetFeed();
+        IList<Feed> GetFeed(FeedModel request);
         Feed PostFeed(FeedModel request);
     }
 }
