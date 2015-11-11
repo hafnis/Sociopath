@@ -26,7 +26,6 @@ namespace Sociopath.Services
 
         public IList<Feed> GetFeed(FeedModel request)
         {
-            twitterService.GetFeed(request);
             var result = facebookService.GetFeed(request);
             var tweets = twitterService.GetFeed(request);
 

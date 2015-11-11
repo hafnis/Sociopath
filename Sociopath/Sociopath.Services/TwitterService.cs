@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LinqToTwitter;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,8 @@ namespace Sociopath.Services
     {
         private const string ConsumerKey = "t4yOeOVPThO1XFAx7pKRl9MIz";
         private const string ConsumerSecret = "9kOT49Vt8wzBnjr0a2Mj9NTbToGi2hfKktMYIHdrICoJcNVULx";
+        private const string TwitterToken = "2284226888-axrNhsFXIXHvuGelfZlnF1sO2XwzufwcRyNI3gJ";
+        private const string TwitterSecret = "myHqir0I33H4BjmxeeDmvfqlxtOrPoU64urFvonrbVKTs";
         private IRepository repository;
 
         public TwitterService(IRepository repository)
@@ -33,24 +36,33 @@ namespace Sociopath.Services
 
         public IList<Feed> GetFeed(FeedModel request)
         {
-            var user = repository.AsQueryable<User>().FirstOrDefault(x => x.Id == request.UserId);
+            var user = repository.AsQueryable<Sociopath.DataEntities.Entities.User>().FirstOrDefault(x => x.Id == request.UserId);
             if (user == null)
             {
                 return null;
             }
 
-            var twitterService = new TweetSharp.TwitterService(ConsumerKey, ConsumerSecret);
-            twitterService.AuthenticateWith(user.TwitterToken, user.TwitterSecret);
-            List<TwitterStatus> tweets = twitterService.ListTweetsOnHomeTimeline(new ListTweetsOnHomeTimelineOptions()).ToList();
+            var auth = new SingleUserAuthorizer
+            {                 
+                CredentialStore = new InMemoryCredentialStore
+                {
+                    ConsumerKey = ConsumerKey,
+                    ConsumerSecret = ConsumerSecret,
+                    OAuthToken = user.TwitterToken,
+                    OAuthTokenSecret = user.TwitterSecret
+                }
+            };
+            var twitterCtx = new TwitterContext(auth);
 
+            var tweets = twitterCtx.Status.Where(tweet => tweet.Type == StatusType.User).ToList();
             var result = new List<Feed>();
 
-            foreach (TwitterStatus tweet in tweets)
+            foreach (Status tweet in tweets)
             {
-                Feed feedItem = repository.AsQueryable<Feed>().FirstOrDefault(x => x.TwitterExternalId == tweet.Id.ToString()) ?? new Feed();
-                feedItem.TwitterExternalId = tweet.Id.ToString();
+                Feed feedItem = repository.AsQueryable<Feed>().FirstOrDefault(x => x.TwitterExternalId == tweet.StatusID.ToString()) ?? new Feed();
+                feedItem.TwitterExternalId = tweet.StatusID.ToString();
                 feedItem.Message = tweet.Text;
-                feedItem.Time = tweet.CreatedDate;
+                feedItem.Time = tweet.CreatedAt;
                 repository.Save(feedItem);
                 result.Add(feedItem);
             }
@@ -61,16 +73,29 @@ namespace Sociopath.Services
 
         public Feed PostFeed(FeedModel model)
         {
-            var user = repository.AsQueryable<User>().FirstOrDefault(x => x.Id == model.UserId);
+            var user = repository.AsQueryable<Sociopath.DataEntities.Entities.User>().FirstOrDefault(x => x.Id == model.UserId);
             if (user == null)
             {
                 return null;
             }
 
-            var twitterService = new TweetSharp.TwitterService(ConsumerKey, ConsumerSecret);
-            twitterService.AuthenticateWith(user.TwitterToken, user.TwitterSecret);
-            var tweet = twitterService.SendTweet(new SendTweetOptions { Status = model.Message });
-            var feed = new Feed { TwitterExternalId = tweet.Id.ToString(), Time = tweet.CreatedDate, Message = tweet.Text };
+            var auth = new SingleUserAuthorizer
+            {
+                CredentialStore = new InMemoryCredentialStore
+                {
+                    ConsumerKey = ConsumerKey,
+                    ConsumerSecret = ConsumerSecret,
+                    OAuthToken = user.TwitterToken,
+                    OAuthTokenSecret = user.TwitterSecret
+                }
+            };
+            var twitterCtx = new TwitterContext(auth);
+
+            //var twitterService = new TweetSharp.TwitterService(ConsumerKey, ConsumerSecret);
+            //twitterService.AuthenticateWith(user.TwitterToken, user.TwitterSecret);
+            //var tweet = twitterService.SendTweet(new SendTweetOptions { Status = model.Message });
+            var tweet = twitterCtx.TweetAsync(model.Message).Result;
+            var feed = new Feed { TwitterExternalId = tweet.StatusID.ToString(), Time = tweet.CreatedAt, Message = tweet.Text };
             return feed;
         }
     }

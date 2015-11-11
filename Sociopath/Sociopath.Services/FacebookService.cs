@@ -69,11 +69,10 @@ namespace Sociopath.Services
             var client = new FacebookClient();
             client.AccessToken = user.FacebookToken;
             
-            var response = client.Post("me/feed", new { message = request.Message});
+            dynamic response = client.Post("me/feed", new { message = request.Message});
 
             if (!string.IsNullOrEmpty(response.ToString())) {
-                dynamic id = JsonConvert.DeserializeObject(response.ToString());
-                var feed = new Feed { FacebookExternalId = id, Time = DateTime.Now, Message = request.Message };
+                var feed = new Feed { FacebookExternalId = response["id"], Time = DateTime.Now, Message = request.Message };
                 repository.Save(feed);
                 repository.Commit();
                 return feed;
