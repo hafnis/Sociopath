@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using System.Web.Http.Validation.Providers;
 using Sociopath.API.Extensions;
 
 namespace Sociopath.API
@@ -15,8 +16,9 @@ namespace Sociopath.API
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
-
+            config.Services.RemoveAll(typeof(System.Web.Http.Validation.ModelValidatorProvider), v => v is InvalidModelValidatorProvider);
             config.Formatters.Remove(config.Formatters.XmlFormatter);
+            config.Filters.Add(new ValidationAttribute());
             config.Filters.Add(new ExceptionAttribute());
         }
     }
