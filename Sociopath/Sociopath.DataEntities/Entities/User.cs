@@ -12,5 +12,7 @@ namespace Sociopath.DataEntities.Entities
         public virtual string TwitterSecret { get; set; }
         public virtual string FacebookId { get; set; }
         public virtual string TwitterId { get; set; }
+        public virtual bool TwitterEnabled { get; set; }
+        public virtual bool FacebookEnabled { get; set; }
     }
 }

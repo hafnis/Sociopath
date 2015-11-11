@@ -10,6 +10,8 @@ namespace Sociopath.ServiceContracts
 {
     public interface IUserService
     {
-        User GetUser(LoginModel model);
+        UserModel GetUser(LoginModel model);
+        UserModel GetUser(int id);
+        UserModel UpdateUser(UserModel model);
     }
 }

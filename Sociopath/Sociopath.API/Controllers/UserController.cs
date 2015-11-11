@@ -16,9 +16,43 @@ namespace Sociopath.API.Controllers
         {
             this.userService = userService;
         }
-        public void Get()
+        public HttpResponseMessage Get(int id)
         {
+            var user = userService.GetUser(id);
+            HttpResponseMessage response;
+            if (user == null)
+            {
+                response = Request.CreateResponse(HttpStatusCode.NotFound, "User not found");
+            }
+            else
+            {
+                response = Request.CreateResponse(HttpStatusCode.OK, user);
+            }
 
+            return response;
+        }
+
+        public HttpResponseMessage Post(LoginModel request)
+        {
+            var user = userService.GetUser(request);
+            var response = Request.CreateResponse(HttpStatusCode.Created, user);
+            return response;
+        }
+
+        public HttpResponseMessage Put(UserModel request)
+        {
+            var user = userService.UpdateUser(request);
+            HttpResponseMessage response;
+            if (user == null)
+            {
+                response = Request.CreateResponse(HttpStatusCode.NotFound, "User not found");
+            }
+            else
+            {
+                response = Request.CreateResponse(HttpStatusCode.OK, request);
+            }
+
+            return response;
         }
 
     }

@@ -19,6 +19,8 @@ namespace Sociopath.DataEntities.Mappings
             Map(f => f.TwitterSecret).Nullable();
             Map(f => f.TwitterId).Nullable();
             Map(f => f.FacebookId).Nullable();
+            Map(f => f.FacebookEnabled).Not.Nullable().Default("0");
+            Map(f => f.TwitterEnabled).Not.Nullable().Default("0");
         }
     }
 }

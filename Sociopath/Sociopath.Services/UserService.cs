@@ -22,7 +22,7 @@ namespace Sociopath.Services
             this.twitterService = twitterService;
         }
 
-        public User GetUser(LoginModel model)
+        public UserModel GetUser(LoginModel model)
         {
             User user = null;
             if (model.provider == Provider.Twitter)
@@ -30,6 +30,7 @@ namespace Sociopath.Services
                 user = repository.AsQueryable<User>().FirstOrDefault(x => x.TwitterSecret == model.Secret && x.TwitterToken == model.Token) ?? new User();
                 user.TwitterToken = model.Token;
                 user.TwitterSecret = model.Secret;
+                user.TwitterEnabled = true;
                 repository.Save(user);
             }
             else if (model.provider == Provider.Facebook)
@@ -37,12 +38,48 @@ namespace Sociopath.Services
                 user = repository.AsQueryable<User>().FirstOrDefault(x => x.FacebookId == model.ExternalId) ?? new User();
                 user.FacebookId = model.ExternalId;
                 user.FacebookToken = model.Token;
+                user.FacebookEnabled = true;
                 repository.Save(user);
             }
 
             repository.Commit();
-            
-            return user;
+
+            var response = new UserModel()
+            {
+                UserId = user.Id,
+                IsFacebookEnabled = user.FacebookEnabled,
+                IsTwitterEnabled = user.TwitterEnabled
+            };
+
+            return response;
+        }
+
+        public UserModel UpdateUser(UserModel model)
+        {
+            var user = repository.AsQueryable<User>().FirstOrDefault(x => x.Id == model.UserId);
+            if (user != null)
+            {
+                user.TwitterEnabled = model.IsTwitterEnabled;
+                user.FacebookEnabled = model.IsFacebookEnabled;
+                repository.Save(user);
+                repository.Commit();
+
+                model.IsTwitterEnabled = user.TwitterEnabled;
+                model.IsFacebookEnabled = user.FacebookEnabled;
+                model.UserId = user.Id;
+                return model;
+            }
+            return null;
+        }
+
+        public UserModel GetUser(int id)
+        {
+            var user = repository.AsQueryable<User>().FirstOrDefault(x => x.Id == id);
+            if (user != null)
+            {
+                return new UserModel { UserId = user.Id, IsFacebookEnabled = user.FacebookEnabled, IsTwitterEnabled = user.TwitterEnabled };
+            }
+            return null;
         }
     }
 }
