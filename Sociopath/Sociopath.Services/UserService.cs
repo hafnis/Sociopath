@@ -81,5 +81,17 @@ namespace Sociopath.Services
             }
             return null;
         }
+
+        public IList<UserModel> GetUsers()
+        {
+            var users = repository.AsQueryable<User>().Select(x => new UserModel
+            {
+                UserId = x.Id,
+                IsFacebookEnabled = x.FacebookEnabled,
+                IsTwitterEnabled = x.TwitterEnabled
+            }).ToList();
+
+            return users;
+        }
     }
 }

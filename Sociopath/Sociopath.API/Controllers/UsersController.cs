@@ -9,13 +9,21 @@ using Sociopath.ServiceContracts;
 
 namespace Sociopath.API.Controllers
 {
-    public class UserController : ApiController
+    public class UsersController : ApiController
     {
         private IUserService userService;
-        public UserController(IUserService userService)
+        public UsersController(IUserService userService)
         {
             this.userService = userService;
         }
+
+        public HttpResponseMessage Get()
+        {
+            var users = userService.GetUsers();
+            var response = Request.CreateResponse(HttpStatusCode.OK, users);
+            return response;
+        }
+
         public HttpResponseMessage Get(int id)
         {
             var user = userService.GetUser(id);
