@@ -1,12 +1,4 @@
 {
-    "cordova-plugin-whitelist": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-whitelist@1"
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
     "phonegap-facebook-plugin": {
         "source": {
             "type": "local",
@@ -33,6 +25,14 @@
             "id": "cordova-plugin-inappbrowser"
         },
         "is_top_level": false,
+        "variables": {}
+    },
+    "cordova-plugin-whitelist": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-whitelist@latest"
+        },
+        "is_top_level": true,
         "variables": {}
     }
 }

@@ -5,11 +5,14 @@
 	</div>
     <div data-bind="foreach: messages" style="margin-bottom: 15px;">
 		<div class="feed-message-wrapper">
-				<div class="feed-message-time" data-bind="text: time"></div> 
-				<span style="vertical-align:middle;" data-bind="foreach: networks">				
-					<img data-bind="attr: {src: './img/' + $data + '.png'}"	 class="feed-message-network">
-				</span>				
-				<div data-bind="text: message" class="feed-message-text"></div>
+				<div class="feed-message-time" data-bind="text: Time"></div> 
+				<span style="vertical-align:middle;" data-bind="if: IsPostedToFacebook">				
+					<img data-bind="attr: {src: './img/facebook.png'}"	 class="feed-message-network">
+				</span>	
+				<span style="vertical-align:middle;" data-bind="if: IsPostedToTwitter">				
+					<img data-bind="attr: {src: './img/twitter.png'}"	 class="feed-message-network">
+				</span>	
+				<div data-bind="text: Message" class="feed-message-text"></div>
 		</div>
 	</div>
 	<div data-role="footer" data-position="fixed" data-tap-toggle="false">

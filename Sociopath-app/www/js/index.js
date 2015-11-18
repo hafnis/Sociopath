@@ -4,6 +4,7 @@ var app = (function() {
 	
 	self.home = require('./home');
 	self.settings = require('./settings');
+	self.api = require('./api');
 	
     self.initialize = function() {
         this.bindEvents();
@@ -48,13 +49,15 @@ var app = (function() {
 			OAuth.initialize('bQveABZX4h316Hug8fo7MP_mqZw');
 			OAuth.popup('twitter', {cache: false})
 				.done(function(result) {
-					console.log(result);
-					result.me().done(function (data) {
-						console.log(data);
-					}).fail(function (data) {
-						console.log(data);
+					var request = { 
+						provider: 2,
+						secret: result.oauth_token_secret,
+						token: result.oauth_token
+					};			
+					api.post('api/users/', request).done(function() {										
+						$( ":mobile-pagecontainer" ).pagecontainer( "change", "home.html", { role: "page", reloadPage: true } );
 					});
-					$( ":mobile-pagecontainer" ).pagecontainer( "change", "home.html", { role: "page", reloadPage: true } );
+
 				})
 				.fail(function (err) {
 				  alert(result);

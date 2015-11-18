@@ -8,7 +8,7 @@ namespace Sociopath.API.Models
     public class FeedItemModel
     {
         public string Message { get; set; }
-        public DateTime Time { get; set; }
+        public string Time { get; set; }
         public bool IsPostedToFacebook { get; set; }
         public bool IsPostedToTwitter { get; set; }
     }

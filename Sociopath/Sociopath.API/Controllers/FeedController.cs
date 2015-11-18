@@ -24,7 +24,7 @@ namespace Sociopath.API.Controllers
             var messages = feedService.GetFeed(new FeedModel { UserId = userId }).Select(x => new FeedItemModel
             {
                 Message = x.Message,
-                Time = x.Time,
+                Time = x.Time.ToLongDateString(),
                 IsPostedToFacebook = string.IsNullOrEmpty(x.FacebookExternalId) ? false : true,
                 IsPostedToTwitter = string.IsNullOrEmpty(x.TwitterExternalId) ? false : true
             }).ToList();
@@ -35,7 +35,15 @@ namespace Sociopath.API.Controllers
         public HttpResponseMessage Post(FeedModel request)
         {
             var feedItem = feedService.PostFeed(request);
-            var response = Request.CreateResponse(HttpStatusCode.Created, feedItem);
+            var feedItemModel = 
+            new FeedItemModel
+            {
+                Message = feedItem.Message,
+                Time = feedItem.Time.ToLongDateString(),
+                IsPostedToFacebook = string.IsNullOrEmpty(feedItem.FacebookExternalId) ? false : true,
+                IsPostedToTwitter = string.IsNullOrEmpty(feedItem.TwitterExternalId) ? false : true
+            };
+            var response = Request.CreateResponse(HttpStatusCode.Created, feedItemModel);
             return response;
         }
     }
