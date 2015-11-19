@@ -43,16 +43,35 @@ namespace Sociopath.Services
 
         public Feed PostFeed(FeedModel request)
         {
-            var facebookResult = facebookService.PostFeed(request);
+            Feed result = null;
 
-            var twitterResult = twitterService.PostFeed(request);
+            var user = repository.AsQueryable<User>(x => x.Id == request.UserId).FirstOrDefault();
 
-            facebookResult.TwitterExternalId = twitterResult.TwitterExternalId;
+            if (user.FacebookEnabled)
+            {
+                result = facebookService.PostFeed(request);
+            }
 
-            repository.Save(facebookResult);
-            repository.Commit();
+            if (user.TwitterEnabled)
+            {
+                var twitterResult = twitterService.PostFeed(request);
+                if (result != null)
+                {
+                    result.TwitterExternalId = twitterResult.TwitterExternalId;
+                }
+                else
+                {
+                    result = twitterResult;
+                }
+            }
 
-            return facebookResult;
+            if (result != null)
+            {
+                repository.Save(result);
+                repository.Commit();
+            }
+
+            return result;
         }
     }
 }
