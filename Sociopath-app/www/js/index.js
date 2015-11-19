@@ -20,8 +20,8 @@ var app = (function() {
 
 	
     self.receivedEvent = function(id) {
-
-		$( ":mobile-pagecontainer" ).on( "pagecontainerload", function( event, ui ) {
+	
+		$( ":mobile-pagecontainer" ).on( "pagecontainerchange", function( event, ui ) {
 			if (ui.options.target == 'home.html' && ui.options.reloadPage) {
 				home.init(ui.toPage[0]);
 			} else if (ui.options.target == 'settings.html' && ui.options.reloadPage) {
@@ -30,19 +30,22 @@ var app = (function() {
 		} );	
 	
 		$('.facebookLogin').on('click', function() {
-			var fbLoginSuccess = function (userData) {
-				console.log(userData);
-				$( ":mobile-pagecontainer" ).pagecontainer( "change", "home.html", { role: "page", reloadPage: true } );		
-			}
-			
-			var loginError = function (error) {
-				console.log(error);
-			}
-
-			facebookConnectPlugin.login(["publish_actions"],
-				fbLoginSuccess,
-				loginError
-			);
+			OAuth.initialize('bQveABZX4h316Hug8fo7MP_mqZw');
+			OAuth.popup('facebook').done(function(data) {
+				data.me().done(function(me) {
+					var request = { 
+						provider: 1,
+						token: data.access_token,
+						externalid: me.id
+					};		
+					$.mobile.loading("show");
+					api.post('api/users/', request).done(function(user) {
+						window.localStorage.setItem("sociopath_userId", user.UserId);
+						$( ":mobile-pagecontainer" ).pagecontainer( "change", "home.html", { role: "page", reloadPage: true } );
+						$.mobile.loading("hide");
+					});					
+				});
+			});
 		});
 		
 		$('.twitterLogin').on('click', function() {
@@ -53,9 +56,12 @@ var app = (function() {
 						provider: 2,
 						secret: result.oauth_token_secret,
 						token: result.oauth_token
-					};			
-					api.post('api/users/', request).done(function() {										
+					};		
+					$.mobile.loading("show");
+					api.post('api/users/', request).done(function(user) {	
+						window.localStorage.setItem("sociopath_userId", user.UserId);
 						$( ":mobile-pagecontainer" ).pagecontainer( "change", "home.html", { role: "page", reloadPage: true } );
+						$.mobile.loading("hide");
 					});
 
 				})
@@ -80,3 +86,18 @@ app.initialize();
         }, 0);
     });
 
+
+ko.bindingHandlers.jqmChecked = {
+    init: ko.bindingHandlers.checked.init,
+    update: function (element, valueAccessor) {
+        //KO v3 and previous versions of KO handle this differently
+        //KO v3 does not use 'update' for 'checked' binding
+        if (ko.bindingHandlers.checked.update) 
+            ko.bindingHandlers.checked.update.apply(this, arguments); //for KO < v3, delegate the call
+        else 
+            ko.utils.unwrapObservable(valueAccessor()); //for KO v3, force a subscription to get further updates
+
+        if ($(element).data("mobile-checkboxradio")) //calling 'refresh' only if already enhanced by JQM
+            $(element).checkboxradio('refresh');
+    }
+};

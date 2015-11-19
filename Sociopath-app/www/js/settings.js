@@ -1,9 +1,13 @@
 module.exports = {
 	
 	init: function(page) {
-		
+		require('./api');
 		var settingsViewModel = require('./ViewModels/SettingsViewModel');
 		
-		ko.applyBindings(new settingsViewModel([{connected: true, enabled: true, name: 'Facebook'}, {connected: true, enabled: false, name: 'Twitter'}]), page);
+		api.get('api/users/'+window.localStorage.getItem('sociopath_userId')).done(function (data) {
+			ko.applyBindings(new settingsViewModel(data), page);
+		});
+		
+		
 	}
 }

@@ -77,7 +77,14 @@ namespace Sociopath.Services
             var user = repository.AsQueryable<User>().FirstOrDefault(x => x.Id == id);
             if (user != null)
             {
-                return new UserModel { UserId = user.Id, IsFacebookEnabled = user.FacebookEnabled, IsTwitterEnabled = user.TwitterEnabled };
+                return new UserModel 
+                { 
+                    UserId = user.Id,
+                    IsFacebookEnabled = user.FacebookEnabled, 
+                    IsTwitterEnabled = user.TwitterEnabled,
+                    IsFacebookConnected = !string.IsNullOrEmpty(user.FacebookToken),
+                    IsTwitterConnected = !string.IsNullOrEmpty(user.TwitterToken) 
+                };
             }
             return null;
         }

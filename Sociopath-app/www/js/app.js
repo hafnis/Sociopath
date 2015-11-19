@@ -11,21 +11,37 @@ module.exports = function (messages) {
 	self.newMessage = ko.observable('');
 	
 	self.send = function() {
-		api.post('api/feed', {message: self.newMessage(), userid: 5}).done(function(data) {
+		$.mobile.loading("show");
+		api.post('api/feed', {message: self.newMessage(), userid: window.localStorage.getItem('sociopath_userId')}).done(function(data) {
 			self.messages.unshift(data);
 			self.newMessage('');
 			$('#new-message').popup('close');
 			$.mobile.silentScroll(0);
+			$.mobile.loading("hide");
 		});
 	}
 	
 	return self;
 };
+
+ 
 },{"../api":3}],2:[function(require,module,exports){
-module.exports = function (networks) {
+module.exports = function (data) {
 	var self = this;
+	require('../api');
+	self.IsTwitterConnected = data.IsTwitterConnected;
+	self.IsFacebookConnected = data.IsFacebookConnected;
+	self.IsFacebookEnabled = ko.observable(data.IsFacebookEnabled);
+	self.IsTwitterEnabled = ko.observable(data.IsTwitterEnabled);
 	
-	self.networks = ko.observableArray(networks);
+	self.save = function() {
+		$.mobile.loading("show");
+		var request = { UserId: window.localStorage.getItem('sociopath_userId'), IsFacebookEnabled: self.IsFacebookEnabled(), IsTwitterEnabled: self.IsTwitterEnabled()};
+		api.put('api/users/', request).done(function() {
+			$( ":mobile-pagecontainer" ).pagecontainer( "change", "home.html", { role: "page" } );
+			$.mobile.loading("hide");			
+		});
+	};
 	
 	self.goBack = function() {
 		$( ":mobile-pagecontainer" ).pagecontainer( "change", "home.html", { role: "page" } );	
@@ -33,13 +49,13 @@ module.exports = function (networks) {
 	
 	return self;
 };
-},{}],3:[function(require,module,exports){
+},{"../api":3}],3:[function(require,module,exports){
 module.exports = {
 	
 	get: function(url, data) {
 		return $.ajax({
 			type: 'GET',
-			url: 'http://192.168.0.103/' + url,
+			url: 'http://192.168.43.195/' + url,
 			data: data
 		});
 	},
@@ -47,21 +63,19 @@ module.exports = {
 	post: function(url, data) {
 		return $.ajax({
 			type: 'POST',
-			url: 'http://192.168.0.103/' + url,
+			url: 'http://192.168.43.195/' + url,
 			data: JSON.stringify(data),
 			contentType: 'application/json'
 		});
 	},
 	
 	put: function(url, data) {
-		$.ajax({
+		return $.ajax({
 			type: 'PUT',
-			url: '192.168.0.103/' + url,
-			data: data
-		}).done(function(data) {
-			console.log(data);
-			return data;
-		});	
+			url: 'http://192.168.43.195/' + url,
+			data: JSON.stringify(data),
+			contentType: 'application/json'
+		});
 	}
 }
 },{}],4:[function(require,module,exports){
@@ -71,15 +85,17 @@ module.exports = {
 		require('./api');
 		var homeViewModel = require('./ViewModels/FeedViewModel'),
 			messages;
-		
-		api.get('api/feed', {userid: 5}).done(function (data) {
-		   console.log(data);
+			$.mobile.loading("show");
+		api.get('api/feed', {userid: window.localStorage.getItem("sociopath_userId")}	).done(function (data) {
 		   messages = data;
 		   ko.applyBindings(new homeViewModel(messages), page);
+		   $.mobile.loading("hide");
 		});
 	
 	}
 }
+
+
 
 
 },{"./ViewModels/FeedViewModel":1,"./api":3}],5:[function(require,module,exports){
@@ -105,8 +121,8 @@ var app = (function() {
 
 	
     self.receivedEvent = function(id) {
-
-		$( ":mobile-pagecontainer" ).on( "pagecontainerload", function( event, ui ) {
+	
+		$( ":mobile-pagecontainer" ).on( "pagecontainerchange", function( event, ui ) {
 			if (ui.options.target == 'home.html' && ui.options.reloadPage) {
 				home.init(ui.toPage[0]);
 			} else if (ui.options.target == 'settings.html' && ui.options.reloadPage) {
@@ -115,19 +131,22 @@ var app = (function() {
 		} );	
 	
 		$('.facebookLogin').on('click', function() {
-			var fbLoginSuccess = function (userData) {
-				console.log(userData);
-				$( ":mobile-pagecontainer" ).pagecontainer( "change", "home.html", { role: "page", reloadPage: true } );		
-			}
-			
-			var loginError = function (error) {
-				console.log(error);
-			}
-
-			facebookConnectPlugin.login(["publish_actions"],
-				fbLoginSuccess,
-				loginError
-			);
+			OAuth.initialize('bQveABZX4h316Hug8fo7MP_mqZw');
+			OAuth.popup('facebook').done(function(data) {
+				data.me().done(function(me) {
+					var request = { 
+						provider: 1,
+						token: data.access_token,
+						externalid: me.id
+					};		
+					$.mobile.loading("show");
+					api.post('api/users/', request).done(function(user) {
+						window.localStorage.setItem("sociopath_userId", user.UserId);
+						$( ":mobile-pagecontainer" ).pagecontainer( "change", "home.html", { role: "page", reloadPage: true } );
+						$.mobile.loading("hide");
+					});					
+				});
+			});
 		});
 		
 		$('.twitterLogin').on('click', function() {
@@ -138,9 +157,12 @@ var app = (function() {
 						provider: 2,
 						secret: result.oauth_token_secret,
 						token: result.oauth_token
-					};			
-					api.post('api/users/', request).done(function() {										
+					};		
+					$.mobile.loading("show");
+					api.post('api/users/', request).done(function(user) {	
+						window.localStorage.setItem("sociopath_userId", user.UserId);
 						$( ":mobile-pagecontainer" ).pagecontainer( "change", "home.html", { role: "page", reloadPage: true } );
+						$.mobile.loading("hide");
 					});
 
 				})
@@ -166,14 +188,34 @@ app.initialize();
     });
 
 
+ko.bindingHandlers.jqmChecked = {
+    init: ko.bindingHandlers.checked.init,
+    update: function (element, valueAccessor) {
+        //KO v3 and previous versions of KO handle this differently
+        //KO v3 does not use 'update' for 'checked' binding
+        if (ko.bindingHandlers.checked.update) 
+            ko.bindingHandlers.checked.update.apply(this, arguments); //for KO < v3, delegate the call
+        else 
+            ko.utils.unwrapObservable(valueAccessor()); //for KO v3, force a subscription to get further updates
+
+        if ($(element).data("mobile-checkboxradio")) //calling 'refresh' only if already enhanced by JQM
+            $(element).checkboxradio('refresh');
+    }
+};
+
 },{"./api":3,"./home":4,"./settings":6}],6:[function(require,module,exports){
 module.exports = {
 	
 	init: function(page) {
-		
+		require('./api');
 		var settingsViewModel = require('./ViewModels/SettingsViewModel');
 		
-		ko.applyBindings(new settingsViewModel([{connected: true, enabled: true, name: 'Facebook'}, {connected: true, enabled: false, name: 'Twitter'}]), page);
+		api.get('api/users/'+window.localStorage.getItem('sociopath_userId')).done(function (data) {
+			ko.applyBindings(new settingsViewModel(data), page);
+		});
+		
+		
 	}
 }
-},{"./ViewModels/SettingsViewModel":2}]},{},[5]);
+
+},{"./ViewModels/SettingsViewModel":2,"./api":3}]},{},[5]);

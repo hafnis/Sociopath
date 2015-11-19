@@ -10,13 +10,17 @@ module.exports = function (messages) {
 	self.newMessage = ko.observable('');
 	
 	self.send = function() {
-		api.post('api/feed', {message: self.newMessage(), userid: 5}).done(function(data) {
+		$.mobile.loading("show");
+		api.post('api/feed', {message: self.newMessage(), userid: window.localStorage.getItem('sociopath_userId')}).done(function(data) {
 			self.messages.unshift(data);
 			self.newMessage('');
 			$('#new-message').popup('close');
 			$.mobile.silentScroll(0);
+			$.mobile.loading("hide");
 		});
 	}
 	
 	return self;
 };
+
+ 

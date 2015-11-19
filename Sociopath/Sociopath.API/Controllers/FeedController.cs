@@ -27,7 +27,7 @@ namespace Sociopath.API.Controllers
                 Time = x.Time.ToLongDateString(),
                 IsPostedToFacebook = string.IsNullOrEmpty(x.FacebookExternalId) ? false : true,
                 IsPostedToTwitter = string.IsNullOrEmpty(x.TwitterExternalId) ? false : true
-            }).ToList();
+            }).ToList().OrderByDescending(x => x.Time);
             var response = Request.CreateResponse(HttpStatusCode.OK, messages);
             return response;
         }

@@ -4,13 +4,15 @@ module.exports = {
 		require('./api');
 		var homeViewModel = require('./ViewModels/FeedViewModel'),
 			messages;
-		
-		api.get('api/feed', {userid: 5}).done(function (data) {
-		   console.log(data);
+			$.mobile.loading("show");
+		api.get('api/feed', {userid: window.localStorage.getItem("sociopath_userId")}	).done(function (data) {
 		   messages = data;
 		   ko.applyBindings(new homeViewModel(messages), page);
+		   $.mobile.loading("hide");
 		});
 	
 	}
 }
+
+
 

@@ -12,5 +12,7 @@ namespace Sociopath.DataEntities.Dto
         public int UserId { get; set; }
         public bool IsFacebookEnabled { get; set; }
         public bool IsTwitterEnabled { get; set; }
+        public bool IsFacebookConnected { get; set; }
+        public bool IsTwitterConnected { get; set; }
     }
 }
