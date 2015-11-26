@@ -6,8 +6,7 @@ module.exports = {
 		
 		api.get('api/users/'+window.localStorage.getItem('sociopath_userId')).done(function (data) {
 			ko.applyBindings(new settingsViewModel(data), page);
-		});
-		
+		});	
 		
 	}
 }

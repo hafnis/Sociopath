@@ -1,7 +1,8 @@
+var ko = require('knockout');
 var app = (function() {
-	
 	var self = this;
-	
+	var $ = require('jquery');
+	$.mobile = require('jquery-mobile');
 	self.home = require('./home');
 	self.settings = require('./settings');
 	self.api = require('./api');
