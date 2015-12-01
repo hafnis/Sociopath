@@ -70,7 +70,7 @@ var app = (function() {
 				  alert(result);
 				});
 		});
-	}
+	};
 	return self;
 })();
 
@@ -78,7 +78,7 @@ app.initialize();
 
     $(document).on('focus', 'input, textArea', function () {
         $('div[data-role="footer"]').hide();
-    })  
+    });  
 
     $(document).on('blur', 'input, textarea', function() {
         setTimeout(function() {
