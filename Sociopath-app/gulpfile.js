@@ -59,8 +59,8 @@ gulp.task('build-js-prod', function() {
 
 gulp.task('build-css-dev', function() {
 	var scripts = [
-		'./www/css/index.css',
-		'./www/css/jquery.mobile-1.4.5.min.css'
+		'./www/css/jquery.mobile-1.4.5.min.css',
+		'./www/css/index.css'
 	];
 	
 	watch('./www/css/index.css', function() {concat();});
@@ -74,8 +74,8 @@ gulp.task('build-css-dev', function() {
 
 gulp.task('build-css-prod', function() {
 	var scripts = [
-		'./www/css/index.css',
-		'./www/css/jquery.mobile-1.4.5.min.css'
+		'./www/css/jquery.mobile-1.4.5.min.css',
+		'./www/css/index.css'
 	];
 
 	return gulp.src(scripts) 

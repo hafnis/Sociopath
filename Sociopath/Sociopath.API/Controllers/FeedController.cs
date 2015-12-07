@@ -24,7 +24,7 @@ namespace Sociopath.API.Controllers
             var messages = feedService.GetFeed(new FeedModel { UserId = userId }).Select(x => new FeedItemModel
             {
                 Message = x.Message,
-                Time = x.Time.ToLongDateString(),
+                Time = x.Time.ToShortDateString(),
                 IsPostedToFacebook = string.IsNullOrEmpty(x.FacebookExternalId) ? false : true,
                 IsPostedToTwitter = string.IsNullOrEmpty(x.TwitterExternalId) ? false : true
             }).ToList().OrderByDescending(x => x.Time);

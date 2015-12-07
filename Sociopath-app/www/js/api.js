@@ -3,7 +3,7 @@ module.exports = {
 	get: function(url, data) {
 		return $.ajax({
 			type: 'GET',
-			url: 'http://192.168.43.195/' + url,
+			url: 'http://sociopath.azurewebsites.net/' + url,
 			data: data
 		});
 	},
@@ -11,7 +11,7 @@ module.exports = {
 	post: function(url, data) {
 		return $.ajax({
 			type: 'POST',
-			url: 'http://192.168.43.195/' + url,
+			url: 'http://sociopath.azurewebsites.net/' + url,
 			data: JSON.stringify(data),
 			contentType: 'application/json'
 		});
@@ -20,7 +20,7 @@ module.exports = {
 	put: function(url, data) {
 		return $.ajax({
 			type: 'PUT',
-			url: 'http://192.168.43.195/' + url,
+			url: 'http://sociopath.azurewebsites.net/' + url,
 			data: JSON.stringify(data),
 			contentType: 'application/json'
 		});

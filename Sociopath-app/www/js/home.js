@@ -1,7 +1,9 @@
 module.exports = {
 	
 	init: function(page) {
-		require('./api');
+		var api = require('./api');
+		var $ = require('jquery');
+		$.mobile = require('jquery-mobile');
 		var homeViewModel = require('./ViewModels/FeedViewModel'),
 			messages;
 			$.mobile.loading("show");

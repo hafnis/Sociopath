@@ -36,10 +36,12 @@ namespace Sociopath.Services
 
         public IList<Feed> GetFeed(FeedModel request)
         {
+            var result = new List<Feed>();
+
             var user = repository.AsQueryable<Sociopath.DataEntities.Entities.User>().FirstOrDefault(x => x.Id == request.UserId);
-            if (user == null)
+            if (user == null || user.TwitterToken == null || user.TwitterSecret == null)
             {
-                return null;
+                return result;
             }
 
             var auth = new SingleUserAuthorizer
@@ -54,8 +56,7 @@ namespace Sociopath.Services
             };
             var twitterCtx = new TwitterContext(auth);
 
-            var tweets = twitterCtx.Status.Where(tweet => tweet.Type == StatusType.User).ToList();
-            var result = new List<Feed>();
+            var tweets = twitterCtx.Status.Where(tweet => tweet.Type == StatusType.User).ToList();            
 
             foreach (Status tweet in tweets)
             {

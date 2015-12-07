@@ -26,10 +26,11 @@ namespace Sociopath.Services
 
         public IList<Feed> GetFeed(FeedModel model)
         {
+            var result = new List<Feed>();
             var user = repository.AsQueryable<User>().FirstOrDefault(x => x.Id == model.UserId);
-            if (user == null)
+            if (user == null || user.FacebookToken == null)
             {
-                return null;
+                return result;
             }
 
             var client = new FacebookClient();
@@ -40,8 +41,6 @@ namespace Sociopath.Services
             dynamic response = client.Get(request);
             var data = response["data"];
             List<FacebookResponseDto> messages = JsonConvert.DeserializeObject<List<FacebookResponseDto>>(data.ToString());
-
-            var result = new List<Feed>();
 
             foreach (var message in messages)
             {
